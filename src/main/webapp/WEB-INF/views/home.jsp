@@ -6,6 +6,8 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta http-equiv="refresh" content="0;URL=javascript:fermer();">
+	<link href="<c:url value="/resources/css/bootstrap.min.css" />" rel="stylesheet">
+	<script src="<c:url value="/resources/js/bootstrap.min.js" />"></script>
 <title>Expo : Médiathèque De POLYTECH</title>
 </head>
 

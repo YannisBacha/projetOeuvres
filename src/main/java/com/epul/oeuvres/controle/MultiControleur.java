@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.multiaction.MultiActionController;
 //import com.epul.metier.*;
@@ -73,6 +74,21 @@ public class MultiControleur {
 			destinationPage = "Erreur";
 		}
 		destinationPage = "home";
+		return new ModelAndView(destinationPage);
+	}
+
+	@RequestMapping(value = "supprimerAdherent.htm", method = RequestMethod.GET)
+	public ModelAndView supprimerAdherent(HttpServletRequest request, HttpServletResponse response, @RequestParam("id") int getId) throws Exception {
+
+		String destinationPage = "";
+		System.out.println(getId);
+		try {
+			AdherentEntity unAdherent = new AdherentEntity();
+		} catch (Exception e) {
+			request.setAttribute("MesErreurs", e.getMessage());
+			destinationPage = "Erreur";
+		}
+		destinationPage = "listerAdherent";
 		return new ModelAndView(destinationPage);
 	}
 

@@ -18,15 +18,15 @@
 				Adhérents </STRONG></U></FONT>
 		</P>
 
-		<TABLE class="table table-hover" BORDER="1">
-			<CAPTION>Tableau des Adhérents</CAPTION>
-			<TR>
-				<TH>Numero</TH>
-				<TH>Nom</TH>
-				<TH>Prénom</TH>
-				<TH>Ville</TH>
+		<table class="table table-hover" BORDER="1">
+			<tr>
+				<th>Numero</th>
+				<th>Nom</th>
+				<th>Prénom</th>
+				<th>Ville</th>
+				<th>Actions</th>
 
-			</TR>
+			</tr>
 
 			<c:forEach items="${mesAdherents}" var="item">
 				<tr>
@@ -34,9 +34,11 @@
 					<td>${item.nomAdherent}</td>
 					<td>${item.prenomAdherent}</td>
 					<td>${item.villeAdherent}</td>
+					<td><a class="btn btn-info" href="#" role="button"><span class="glyphicon glyphicon-pencil"></span>Modifier</a>
+					<a class="btn btn-danger" href="supprimerAdherent.htm?id=${item.idAdherent}" role="button"><span class="glyphicon glyphicon-remove-circle"></span>Supprimer</a></td>
 				</tr>
 			</c:forEach>
-		</TABLE>
+		</table>
 	</div>
 
 </body>
