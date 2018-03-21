@@ -12,6 +12,8 @@ public class OeuvreventeEntity {
     private String titreOeuvrevente;
     private String etatOeuvrevente;
     private double prixOeuvrevente;
+    private int idProprietaire;
+    private ProprietaireEntity proprietaireOeuvrevente;
 
     @Id
     @Column(name = "id_oeuvrevente")
@@ -52,6 +54,26 @@ public class OeuvreventeEntity {
     public void setPrixOeuvrevente(double prixOeuvrevente) {
         this.prixOeuvrevente = prixOeuvrevente;
     }
+
+    @Basic
+    @Column(name = "id_proprietaire")
+    public int getIdProprietaire() {
+        return idProprietaire;
+    }
+
+    public void setIdProprietaire(int idProprietaire) {
+        this.idProprietaire = idProprietaire;
+    }
+
+    public ProprietaireEntity getProprietaireOeuvrevente() {
+        return proprietaireOeuvrevente;
+    }
+
+    public void setProprietaireOeuvrevente(ProprietaireEntity proprietaireOeuvrevente) {
+        this.proprietaireOeuvrevente = proprietaireOeuvrevente;
+    }
+
+
 
     @Override
     public boolean equals(Object o) {

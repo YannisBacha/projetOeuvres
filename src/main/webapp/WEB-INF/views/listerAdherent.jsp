@@ -7,24 +7,24 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<link href="<c:url value="/resources/css/bootstrap.min.css" />" rel="stylesheet">
+	<link href="<c:url value="/resources/css/oeuvre.css" />" rel="stylesheet">
 	<script src="<c:url value="/resources/js/bootstrap.min.js" />"></script>
 <title>Affichage de tous les adhérents</title>
 </head>
 <body>
 	<div class="container">
-		<A class="btn btn-info" href="index.htm" role="button">Retour Accueil</A>
-		<P align="center">
-			<FONT face="Arial" size="5" color="#004080"><U> <STRONG>Listing&nbsp;des
-				Adhérents </STRONG></U></FONT>
+		<jsp:include page="navbar.jsp"/>
+		<P align="center" class="titre">
+		<h3>Liste des Adhérents</h3>
 		</P>
 
-		<table class="table table-hover" BORDER="1">
+		<table class="table table-hover">
 			<tr>
-				<th>Numero</th>
-				<th>Nom</th>
-				<th>Prénom</th>
-				<th>Ville</th>
-				<th>Actions</th>
+				<th class="col-md-1">Numero</th>
+				<th class="col-md-2">Nom</th>
+				<th class="col-md-2">Prénom</th>
+				<th class="col-md-4">Ville</th>
+				<th class="col-md-3">Actions</th>
 
 			</tr>
 

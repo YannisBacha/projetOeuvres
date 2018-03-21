@@ -2,6 +2,8 @@ package com.epul.oeuvres.dao;
 
 import com.epul.oeuvres.meserreurs.MonException;
 import com.epul.oeuvres.metier.AdherentEntity;
+import com.epul.oeuvres.metier.OeuvreventeEntity;
+import com.epul.oeuvres.metier.ProprietaireEntity;
 
 import javax.persistence.EntityTransaction;
 import java.util.List;
@@ -105,5 +107,29 @@ public class Service extends EntityService{
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+	/* Lister les adherents
+	 * */
+	public List<OeuvreventeEntity> consulterListeOeuvres() throws MonException {
+		List<OeuvreventeEntity> mesOeuvres = null;
+		try {
+			EntityTransaction transac = startTransaction();
+			transac.begin();
+			mesOeuvres = (List<OeuvreventeEntity>) entitymanager.createQuery("SELECT o FROM OeuvreventeEntity o ORDER BY o.titreOeuvrevente").getResultList();
+
+			// Récuperation du proprietaire
+			ProprietaireEntity proprietaireEntity = null;
+			for (OeuvreventeEntity oeuvre : mesOeuvres) {
+				proprietaireEntity = (ProprietaireEntity) entitymanager.createQuery(("SELECT p FROM ProprietaireEntity p WHERE P.IdProprietaire = : id")).setParameter("id", oeuvre.getIdProprietaire()).getSingleResult();
+				oeuvre.setProprietaireOeuvrevente(proprietaireEntity);
+			}
+			entitymanager.close();
+		} catch (RuntimeException e) {
+			new MonException("Erreur de lecture", e.getMessage());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return mesOeuvres;
 	}
 }

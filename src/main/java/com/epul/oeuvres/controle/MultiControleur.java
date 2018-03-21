@@ -68,11 +68,13 @@ public class MultiControleur {
 		try {
             Service unService = new Service();
             unService.supprimerAdherent(getId);
+            // On recharge la liste des adhérents
+            request.setAttribute("mesAdherents", unService.consulterListeAdherents());
+            destinationPage = "listerAdherent";
         } catch (Exception e) {
             request.setAttribute("MesErreurs", e.getMessage());
 			destinationPage = "Erreur";
 		}
-        destinationPage = "home";
         return new ModelAndView(destinationPage);
 	}
 
@@ -110,6 +112,21 @@ public class MultiControleur {
 
 		return new ModelAndView(destinationPage);
 	}
+
+    @RequestMapping(value = "listerOeuvre.htm")
+    public ModelAndView afficherLesOeuvres(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        String destinationPage;
+        try {
+            Service unService = new Service();
+            request.setAttribute("mesOeuvres", unService.consulterListeOeuvres());
+            destinationPage = "listerOeuvre";
+        } catch (MonException e) {
+            request.setAttribute("MesErreurs", e.getMessage());
+            destinationPage = "Erreur";
+
+        }
+        return new ModelAndView(destinationPage);
+    }
 
 	// /
 	// / Affichage de la page d'accueil
