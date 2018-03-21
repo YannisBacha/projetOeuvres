@@ -1,40 +1,24 @@
 package com.epul.oeuvres.controle;
 
 //import javax.servlet.ServletContext;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.epul.oeuvres.dao.Service;
+import com.epul.oeuvres.meserreurs.MonException;
+import com.epul.oeuvres.metier.AdherentEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.multiaction.MultiActionController;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 //import com.epul.metier.*;
 //import com.epul.meserreurs.*;
 
-
-
-import com.epul.oeuvres.dao.Service;
-import com.epul.oeuvres.meserreurs.*;
-import com.epul.oeuvres.metier.*;
-
-
-
-
-
-
-
-import org.springframework.ui.Model;
-
-
-
-import java.util.*;
-
 ///
-/// Les méthode du contrôleur répondent à des sollicitations
+/// Les mï¿½thode du contrï¿½leur rï¿½pondent ï¿½ des sollicitations
 /// des pages JSP
 
 @Controller
@@ -81,16 +65,37 @@ public class MultiControleur {
 	public ModelAndView supprimerAdherent(HttpServletRequest request, HttpServletResponse response, @RequestParam("id") int getId) throws Exception {
 
 		String destinationPage = "";
-		System.out.println(getId);
 		try {
-			AdherentEntity unAdherent = new AdherentEntity();
-		} catch (Exception e) {
-			request.setAttribute("MesErreurs", e.getMessage());
+            Service unService = new Service();
+            unService.supprimerAdherent(getId);
+        } catch (Exception e) {
+            request.setAttribute("MesErreurs", e.getMessage());
 			destinationPage = "Erreur";
 		}
-		destinationPage = "listerAdherent";
-		return new ModelAndView(destinationPage);
+        destinationPage = "home";
+        return new ModelAndView(destinationPage);
 	}
+
+    @RequestMapping(value = "modifierAdherent.htm", method = RequestMethod.GET)
+    public ModelAndView modifierAdherent(HttpServletRequest request, HttpServletResponse response, @RequestParam("id") int getId, @RequestParam("nom") String getNom, @RequestParam("prenom") String getPrenom, @RequestParam("ville") String getVille) throws Exception {
+
+        String destinationPage = "";
+        try {
+            AdherentEntity adherentEntity = new AdherentEntity();
+            adherentEntity.setIdAdherent(getId);
+            adherentEntity.setNomAdherent(getNom);
+            adherentEntity.setPrenomAdherent(getPrenom);
+            adherentEntity.setVilleAdherent(getVille);
+
+            Service unService = new Service();
+            unService.modifierAdherent(adherentEntity);
+        } catch (Exception e) {
+            request.setAttribute("MesErreurs", e.getMessage());
+            destinationPage = "Erreur";
+        }
+        destinationPage = "home";
+        return new ModelAndView(destinationPage);
+    }
 
 	@RequestMapping(value = "ajouterAdherent.htm")
 	public ModelAndView ajouterAdherent(HttpServletRequest request, HttpServletResponse response) throws Exception {

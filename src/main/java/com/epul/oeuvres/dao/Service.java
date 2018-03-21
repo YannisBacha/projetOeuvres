@@ -1,12 +1,10 @@
 package com.epul.oeuvres.dao;
 
 import com.epul.oeuvres.meserreurs.MonException;
-import java.util.*;
-
-import com.epul.oeuvres.metier.*;
-import org.hibernate.Query;
+import com.epul.oeuvres.metier.AdherentEntity;
 
 import javax.persistence.EntityTransaction;
+import java.util.List;
 
 public class Service extends EntityService{
 
@@ -64,8 +62,7 @@ public class Service extends EntityService{
 			adherents = (List<AdherentEntity>)entitymanager.createQuery("SELECT a FROM AdherentEntity a WHERE a.idAndherent="+numero).getResultList();
 			adherent = adherents.get(0);
 			entitymanager.close();
-		}catch (RuntimeException e)
-		{
+		} catch (RuntimeException e) {
 			new MonException("Erreur de lecture", e.getMessage());
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -73,6 +70,40 @@ public class Service extends EntityService{
 		return adherent;
 	}
 
+	public void supprimerAdherent(int numero) throws MonException {
+		try {
+			EntityTransaction transac = startTransaction();
+			transac.begin();
 
+			entitymanager.createQuery("DELETE FROM AdherentEntity a WHERE a.idAdherent = :numero").setParameter("numero", numero).executeUpdate();
+			transac.commit();
 
+			entitymanager.close();
+		} catch (RuntimeException e) {
+			e.printStackTrace();
+			new MonException("Erreur de lecture", e.getMessage());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void modifierAdherent(AdherentEntity adherentEntity) throws MonException {
+		try {
+			EntityTransaction transac = startTransaction();
+			transac.begin();
+
+			entitymanager.createQuery("UPDATE AdherentEntity a SET a.nomAdherent=" + adherentEntity.getNomAdherent() + ", " +
+					"a.prenomAdherent=" + adherentEntity.getPrenomAdherent() + ", " +
+					"a.villeAdherent=" + adherentEntity.getVilleAdherent() + " " +
+					"WHERE a.idAdherent =" + adherentEntity.getIdAdherent()).executeUpdate();
+			transac.commit();
+
+			entitymanager.close();
+		} catch (RuntimeException e) {
+			e.printStackTrace();
+			new MonException("Erreur de lecture", e.getMessage());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 }
