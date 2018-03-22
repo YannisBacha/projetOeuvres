@@ -14,10 +14,7 @@
 <body>
 	<div class="container">
 		<jsp:include page="navbar.jsp"/>
-		<P align="center" class="titre">
 		<h3>Liste des Adhérents</h3>
-		</P>
-
 		<table class="table table-hover">
 			<tr>
 				<th class="col-md-1">Numero</th>
@@ -35,8 +32,9 @@
 					<td>${item.prenomAdherent}</td>
 					<td>${item.villeAdherent}</td>
 					<td><a class="btn btn-info" href="modifierAdherent.htm?id=${item.idAdherent}" role="button"><span
-							class="glyphicon glyphicon-pencil"></span>Modifier</a>
-					<a class="btn btn-danger" href="supprimerAdherent.htm?id=${item.idAdherent}" role="button"><span class="glyphicon glyphicon-remove-circle"></span>Supprimer</a></td>
+                            class="glyphicon glyphicon-pencil"></span> Modifier</a>
+                        <a class="btn btn-danger" href="supprimerAdherent.htm?id=${item.idAdherent}" role="button"><span
+                                class="glyphicon glyphicon-remove-circle"></span> Supprimer</a></td>
 				</tr>
 			</c:forEach>
 		</table>

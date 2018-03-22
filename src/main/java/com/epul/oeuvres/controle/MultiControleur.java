@@ -48,9 +48,9 @@ public class MultiControleur {
 		String destinationPage = "";
 		try {
 			AdherentEntity unAdherent = new AdherentEntity();
-			unAdherent.setNomAdherent(request.getParameter("txtnom"));
-			unAdherent.setPrenomAdherent(request.getParameter("txtprenom"));
-			unAdherent.setVilleAdherent(request.getParameter("txtville"));
+            unAdherent.setNomAdherent(request.getParameter("nom"));
+            unAdherent.setPrenomAdherent(request.getParameter("prenom"));
+            unAdherent.setVilleAdherent(request.getParameter("ville"));
 			Service unService = new Service();
 			unService.insertAdherent(unAdherent);
 		} catch (Exception e) {
@@ -79,39 +79,53 @@ public class MultiControleur {
 	}
 
     @RequestMapping(value = "modifierAdherent.htm", method = RequestMethod.GET)
-    public ModelAndView modifierAdherent(HttpServletRequest request, HttpServletResponse response, @RequestParam("id") int getId, @RequestParam("nom") String getNom, @RequestParam("prenom") String getPrenom, @RequestParam("ville") String getVille) throws Exception {
-
+    public ModelAndView modifierAdherent(HttpServletRequest request, HttpServletResponse response, @RequestParam("id") int getId) throws Exception {
         String destinationPage = "";
         try {
-            AdherentEntity adherentEntity = new AdherentEntity();
-            adherentEntity.setIdAdherent(getId);
-            adherentEntity.setNomAdherent(getNom);
-            adherentEntity.setPrenomAdherent(getPrenom);
-            adherentEntity.setVilleAdherent(getVille);
-
             Service unService = new Service();
-            unService.modifierAdherent(adherentEntity);
+            request.setAttribute("monAdherent", unService.adherentById(getId));
+            destinationPage = "modifierAdherent";
         } catch (Exception e) {
             request.setAttribute("MesErreurs", e.getMessage());
             destinationPage = "Erreur";
         }
-        destinationPage = "home";
         return new ModelAndView(destinationPage);
     }
 
 	@RequestMapping(value = "ajouterAdherent.htm")
 	public ModelAndView ajouterAdherent(HttpServletRequest request, HttpServletResponse response) throws Exception {
-
 		String destinationPage = "";
 		try {
 			destinationPage = "ajouterAdherent";
 		} catch (Exception e) {
 			request.setAttribute("MesErreurs", e.getMessage());
-			destinationPage = "rreur";
+            destinationPage = "Erreur";
 		}
 
 		return new ModelAndView(destinationPage);
 	}
+
+    @RequestMapping(value = "modificationAdherent.htm")
+    public ModelAndView modificationAdherent(HttpServletRequest request, HttpServletResponse response) throws Exception {
+
+        String destinationPage = null;
+        try {
+            Service unService = new Service();
+            AdherentEntity unAdherent = unService.adherentById(Integer.parseInt(request.getParameter("id")));
+            unAdherent.setNomAdherent(request.getParameter("nom"));
+            unAdherent.setPrenomAdherent(request.getParameter("prenom"));
+            unAdherent.setVilleAdherent(request.getParameter("ville"));
+            unService.modifierAdherent(unAdherent);
+            // On recharge la liste des adhérents
+            request.setAttribute("mesAdherents", unService.consulterListeAdherents());
+            destinationPage = "listerAdherent";
+        } catch (Exception e) {
+            request.setAttribute("MesErreurs", e.getMessage());
+            destinationPage = "Erreur";
+        }
+
+        return new ModelAndView(destinationPage);
+    }
 
     @RequestMapping(value = "listerOeuvre.htm")
     public ModelAndView afficherLesOeuvres(HttpServletRequest request, HttpServletResponse response) throws Exception {

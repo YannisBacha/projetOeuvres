@@ -3,7 +3,6 @@ package com.epul.oeuvres.dao;
 import com.epul.oeuvres.meserreurs.MonException;
 import com.epul.oeuvres.metier.AdherentEntity;
 import com.epul.oeuvres.metier.OeuvreventeEntity;
-import com.epul.oeuvres.metier.ProprietaireEntity;
 
 import javax.persistence.EntityTransaction;
 import java.util.List;
@@ -55,14 +54,12 @@ public class Service extends EntityService{
 	/* Consultation d'une adherent par son numéro
 	*/
 	public AdherentEntity adherentById(int numero) throws MonException {
-		List<AdherentEntity> adherents = null;
 		AdherentEntity adherent = new AdherentEntity();
 		try {
 			EntityTransaction transac = startTransaction();
 			transac.begin();
-
-			adherents = (List<AdherentEntity>)entitymanager.createQuery("SELECT a FROM AdherentEntity a WHERE a.idAndherent="+numero).getResultList();
-			adherent = adherents.get(0);
+            //adherent = (AdherentEntity)entitymanager.createQuery("SELECT a FROM AdherentEntity a WHERE a.idAndherent=:id").setParameter("id", numero).getSingleResult();
+            adherent = entitymanager.find(AdherentEntity.class, numero);
 			entitymanager.close();
 		} catch (RuntimeException e) {
 			new MonException("Erreur de lecture", e.getMessage());
@@ -93,13 +90,8 @@ public class Service extends EntityService{
 		try {
 			EntityTransaction transac = startTransaction();
 			transac.begin();
-
-			entitymanager.createQuery("UPDATE AdherentEntity a SET a.nomAdherent=" + adherentEntity.getNomAdherent() + ", " +
-					"a.prenomAdherent=" + adherentEntity.getPrenomAdherent() + ", " +
-					"a.villeAdherent=" + adherentEntity.getVilleAdherent() + " " +
-					"WHERE a.idAdherent =" + adherentEntity.getIdAdherent()).executeUpdate();
+            entitymanager.merge(adherentEntity);
 			transac.commit();
-
 			entitymanager.close();
 		} catch (RuntimeException e) {
 			e.printStackTrace();
@@ -109,21 +101,14 @@ public class Service extends EntityService{
 		}
 	}
 
-	/* Lister les adherents
+    /* Lister les oeuvres
 	 * */
 	public List<OeuvreventeEntity> consulterListeOeuvres() throws MonException {
 		List<OeuvreventeEntity> mesOeuvres = null;
 		try {
 			EntityTransaction transac = startTransaction();
 			transac.begin();
-			mesOeuvres = (List<OeuvreventeEntity>) entitymanager.createQuery("SELECT o FROM OeuvreventeEntity o ORDER BY o.titreOeuvrevente").getResultList();
-
-			// Récuperation du proprietaire
-			ProprietaireEntity proprietaireEntity = null;
-			for (OeuvreventeEntity oeuvre : mesOeuvres) {
-				proprietaireEntity = (ProprietaireEntity) entitymanager.createQuery(("SELECT p FROM ProprietaireEntity p WHERE P.IdProprietaire = : id")).setParameter("id", oeuvre.getIdProprietaire()).getSingleResult();
-				oeuvre.setProprietaireOeuvrevente(proprietaireEntity);
-			}
+            mesOeuvres = (List<OeuvreventeEntity>) entitymanager.createQuery("SELECT o FROM OeuvreventeEntity o").getResultList();
 			entitymanager.close();
 		} catch (RuntimeException e) {
 			new MonException("Erreur de lecture", e.getMessage());

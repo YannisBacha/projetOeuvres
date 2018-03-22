@@ -14,32 +14,28 @@
 <body>
 <div class="container">
     <jsp:include page="navbar.jsp"/>
-    <P align="center" class="titre">
-    <h3>Liste des Oeuvres en ventes</h3>
-    </P>
-
+    <h3>Liste des Oeuvres</h3>
     <table class="table table-hover">
         <tr>
             <th class="col-md-3">Titre</th>
             <th class="col-md-2">Prix</th>
-            <th class="col-md-4">Propriétaire</th>
+            <th class="col-md-2">Propriétaire</th>
+            <th class="col-md-2">Etat</th>
             <th class="col-md-3">Actions</th>
-
         </tr>
-
         <c:forEach items="${mesOeuvres}" var="item">
             <tr>
                 <td>${item.titreOeuvrevente}</td>
                 <td>${item.prixOeuvrevente} €</td>
-                <td>${item.proprietaireOeuvre.prenomProprietaire} ${item.proprietaireOeuvre.nomProprietaire}</td>
-                <td><a class="btn btn-info" href="modifierAdherent.htm?id=${item.idOeuvrevente}" role="button"><span
-                        class="glyphicon glyphicon-pencil"></span>Modifier</a>
-                    <a class="btn btn-danger" href="supprimerAdherent.htm?id=${item.idOeuvrevente}" role="button"><span
-                            class="glyphicon glyphicon-remove-circle"></span>Supprimer</a></td>
+                <td>${item.proprietaireOeuvrevente.prenomProprietaire} ${item.proprietaireOeuvrevente.nomProprietaire}</td>
+                <td>${item.etatOeuvrevente == "R" ? "Déjà Réservée" : "Réservation Possible"}</td>
+                <td><a class="btn btn-info" href="modifierOeuvre.htm?id=${item.idOeuvrevente}" role="button"><span
+                        class="glyphicon glyphicon-pencil"></span> Modifier</a>
+                    <a class="btn btn-success" href="reserverOeuvre.htm?id=${item.idOeuvrevente}" role="button"><span
+                            class="glyphicon glyphicon-tags"></span> Réservation</a></td>
             </tr>
         </c:forEach>
     </table>
 </div>
-
 </body>
 </html>
