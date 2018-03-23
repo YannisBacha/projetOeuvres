@@ -8,13 +8,59 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <link href="<c:url value="/resources/css/bootstrap.min.css" />" rel="stylesheet">
     <link href="<c:url value="/resources/css/oeuvre.css" />" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="<c:url value="/resources/js/bootstrap.min.js" />"></script>
     <title>Affichage de toutes les oeuvres</title>
 </head>
+
+<script>
+    $(document).ready(function () {
+        /*$("#btnReservation").click(function(){
+            var idOeuvre = $(this).data('id');
+            console.log(idOeuvre);
+            $(".modal-body #idOeuvre").val(idOeuvre);
+            $("#modalReservation").modal('show');
+        });*/
+        $('#modalReservation').on('show.bs.modal', function (e) {
+            console.log(e.relatedTarget);
+            console.log(e.relatedTarget.id);
+            $(".modal-body #idOeuvre").val(e.relatedTarget.id);
+        })
+    });
+</script>
+
 <body>
 <div class="container">
     <jsp:include page="navbar.jsp"/>
     <h3>Liste des Oeuvres</h3>
+    <!-- Modal -->
+    <div class="modal fade" id="modalReservation" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="hidden" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Réservation de l'oeuvre</h4>
+                </div>
+                <div class="modal-body">
+                    <form action="reserverOeuvre.htm" method="post">
+                        <div class="form-group">
+                            <input type="text" name="idOeuvre" id="idOeuvre" value=""/>
+                            <label for="adherent">Sélectionner un adhérent</label>
+                            <select class="form-control" name="adherent" id="adherent">
+                                <c:forEach items="${mesAdherents}" var="item">
+                                    <option value="${item.idAdherent}">${item.prenomAdherent} ${item.nomAdherent}</option>
+                                </c:forEach>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Valider</button>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
     <table class="table table-hover">
         <tr>
             <th class="col-md-3">Titre</th>
@@ -41,10 +87,12 @@
                     <c:otherwise>
                         <td>Réservation Possible</td>
                         <td><a class="btn btn-info" href="modifierOeuvre.htm?id=${item.idOeuvrevente}"
-                               role="button"><span
-                                class="glyphicon glyphicon-pencil"></span> Modifier</a>
-                            <a class="btn btn-success" href="reserverOeuvre.htm?id=${item.idOeuvrevente}" role="button"><span
-                                    class="glyphicon glyphicon-export"></span> Réservation</a></td>
+                               role="button"><span class="glyphicon glyphicon-pencil"></span> Modifier</a>
+                            <button class="btn btn-success" data-toggle="modal" data-target="#modalReservation"
+                                    id="${item.idOeuvrevente}" type="button"><span
+                                    class="glyphicon glyphicon-export"></span> Réservation
+                            </button>
+                        </td>
                     </c:otherwise>
                 </c:choose>
             </tr>
@@ -53,3 +101,4 @@
 </div>
 </body>
 </html>
+

@@ -31,7 +31,7 @@
                 </div>
                 <div class="form-group">
                     <label for="prix">Prix de l'oeuvre</label>
-                    <input type="text" class="form-control" name="prix" id="prix"/>
+                    <input type="number" class="form-control" name="prix" id="prix"/>
                 </div>
                 <div class="form-group">
                     <label for="proprietaire">Propriétaire de l'oeuvre</label>
