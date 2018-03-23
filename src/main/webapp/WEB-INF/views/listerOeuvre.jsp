@@ -18,21 +18,35 @@
     <table class="table table-hover">
         <tr>
             <th class="col-md-3">Titre</th>
-            <th class="col-md-2">Prix</th>
+            <th class="col-md-1">Prix</th>
             <th class="col-md-2">Propriétaire</th>
             <th class="col-md-2">Etat</th>
-            <th class="col-md-3">Actions</th>
+            <th class="col-md-4">Actions</th>
         </tr>
         <c:forEach items="${mesOeuvres}" var="item">
             <tr>
                 <td>${item.titreOeuvrevente}</td>
                 <td>${item.prixOeuvrevente} €</td>
                 <td>${item.proprietaireOeuvrevente.prenomProprietaire} ${item.proprietaireOeuvrevente.nomProprietaire}</td>
-                <td>${item.etatOeuvrevente == "R" ? "Déjà Réservée" : "Réservation Possible"}</td>
-                <td><a class="btn btn-info" href="modifierOeuvre.htm?id=${item.idOeuvrevente}" role="button"><span
-                        class="glyphicon glyphicon-pencil"></span> Modifier</a>
-                    <a class="btn btn-success" href="reserverOeuvre.htm?id=${item.idOeuvrevente}" role="button"><span
-                            class="glyphicon glyphicon-tags"></span> Réservation</a></td>
+                <c:choose>
+                    <c:when test="${item.etatOeuvrevente == 'R'}">
+                        <td>Déjà Réservée</td>
+                        <td><a class="btn btn-info" href="modifierOeuvre.htm?id=${item.idOeuvrevente}"
+                               role="button"><span
+                                class="glyphicon glyphicon-pencil"></span> Modifier</a>
+                            <a class="btn btn-warning" href="cancelReservation.htm?id=${item.idOeuvrevente}"
+                               role="button"><span
+                                    class="glyphicon glyphicon-import"></span> Annuler la réservation</a></td>
+                    </c:when>
+                    <c:otherwise>
+                        <td>Réservation Possible</td>
+                        <td><a class="btn btn-info" href="modifierOeuvre.htm?id=${item.idOeuvrevente}"
+                               role="button"><span
+                                class="glyphicon glyphicon-pencil"></span> Modifier</a>
+                            <a class="btn btn-success" href="reserverOeuvre.htm?id=${item.idOeuvrevente}" role="button"><span
+                                    class="glyphicon glyphicon-export"></span> Réservation</a></td>
+                    </c:otherwise>
+                </c:choose>
             </tr>
         </c:forEach>
     </table>

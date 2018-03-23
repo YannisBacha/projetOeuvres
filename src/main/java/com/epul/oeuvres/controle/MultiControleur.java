@@ -5,6 +5,7 @@ package com.epul.oeuvres.controle;
 import com.epul.oeuvres.dao.Service;
 import com.epul.oeuvres.meserreurs.MonException;
 import com.epul.oeuvres.metier.AdherentEntity;
+import com.epul.oeuvres.metier.OeuvreventeEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -139,6 +140,40 @@ public class MultiControleur {
             destinationPage = "Erreur";
 
         }
+        return new ModelAndView(destinationPage);
+    }
+
+    @RequestMapping(value = "ajouterOeuvre.htm")
+    public ModelAndView ajouterOeuvre(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        String destinationPage = "";
+        try {
+            Service unService = new Service();
+            request.setAttribute("mesProprietaires", unService.consulterListeProprietaires());
+            destinationPage = "ajouterOeuvre";
+        } catch (Exception e) {
+            request.setAttribute("MesErreurs", e.getMessage());
+            destinationPage = "Erreur";
+        }
+
+        return new ModelAndView(destinationPage);
+    }
+
+    @RequestMapping(value = "insertOeuvre.htm")
+    public ModelAndView insertOeuvre(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        String destinationPage = "";
+        try {
+            OeuvreventeEntity uneOeuvre = new OeuvreventeEntity();
+            Service unService = new Service();
+            uneOeuvre.setTitreOeuvrevente(request.getParameter("titre"));
+            uneOeuvre.setPrixOeuvrevente(Double.parseDouble(request.getParameter("prix")));
+            uneOeuvre.setProprietaireOeuvrevente(unService.proprietaireById(Integer.parseInt(request.getParameter("proprietaire"))));
+            uneOeuvre.setEtatOeuvrevente("L");
+            unService.insertOeuvre(uneOeuvre);
+        } catch (Exception e) {
+            request.setAttribute("MesErreurs", e.getMessage());
+            destinationPage = "Erreur";
+        }
+        destinationPage = "home";
         return new ModelAndView(destinationPage);
     }
 

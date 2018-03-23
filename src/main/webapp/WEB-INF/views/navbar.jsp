@@ -13,7 +13,7 @@
             <ul class="nav navbar-nav">
                 <li><a href="ajouterAdherent.htm">Ajouter un adhérent</a></li>
                 <li><a href="listerAdherent.htm">Lister les adhérents</a></li>
-                <li><a href="#.htm">Ajouter une oeuvre</a></li>
+                <li><a href="ajouterOeuvre.htm">Ajouter une oeuvre</a></li>
                 <li><a href="listerOeuvre.htm">Consulter les oeuvres</a></li>
             </ul>
         </div><!-- /.navbar-collapse -->
