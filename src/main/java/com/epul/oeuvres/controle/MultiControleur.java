@@ -100,6 +100,20 @@ public class MultiControleur {
         }
         return new ModelAndView(destinationPage);
     }
+
+    @RequestMapping(value = "modifierOeuvre.htm", method = RequestMethod.GET)
+    public ModelAndView modifierOeuvre(HttpServletRequest request, HttpServletResponse response, @RequestParam("id") int getId) throws Exception {
+        String destinationPage = "";
+        try {
+            Service unService = new Service();
+            request.setAttribute("monOeuvre", unService.oeuvreById(getId));
+            destinationPage = "modifierOeuvre";
+        } catch (Exception e) {
+            request.setAttribute("MesErreurs", e.getMessage());
+            destinationPage = "Erreur";
+        }
+        return new ModelAndView(destinationPage);
+    }
     //endregion
 
     //region INSERTION/MODIFICATION/SUPPRESSION BASE
@@ -114,11 +128,11 @@ public class MultiControleur {
             unAdherent.setVilleAdherent(request.getParameter("ville"));
             Service unService = new Service();
             unService.insertObjet(unAdherent);
+            destinationPage = "redirect:/listerAdherent.htm";
         } catch (Exception e) {
             request.setAttribute("MesErreurs", e.getMessage());
             destinationPage = "Erreur";
         }
-        destinationPage = "home";
         return new ModelAndView(destinationPage);
     }
 
@@ -133,11 +147,11 @@ public class MultiControleur {
             uneOeuvre.setProprietaireOeuvrevente(unService.proprietaireById(Integer.parseInt(request.getParameter("proprietaire"))));
             uneOeuvre.setEtatOeuvrevente("L");
             unService.insertObjet(uneOeuvre);
+            destinationPage = "redirect:/listerOeuvre.htm";
         } catch (Exception e) {
             request.setAttribute("MesErreurs", e.getMessage());
             destinationPage = "Erreur";
         }
-        destinationPage = "home";
         return new ModelAndView(destinationPage);
     }
 
@@ -148,9 +162,7 @@ public class MultiControleur {
         try {
             Service unService = new Service();
             unService.supprimerAdherent(getId);
-            // On recharge la liste des adhérents
-            request.setAttribute("mesAdherents", unService.consulterListeAdherents());
-            destinationPage = "listerAdherent";
+            destinationPage = "redirect:/listerAdherent.htm";
         } catch (Exception e) {
             request.setAttribute("MesErreurs", e.getMessage());
             destinationPage = "Erreur";
@@ -169,9 +181,27 @@ public class MultiControleur {
             unAdherent.setPrenomAdherent(request.getParameter("prenom"));
             unAdherent.setVilleAdherent(request.getParameter("ville"));
             unService.modifierObjet(unAdherent);
-            // On recharge la liste des adhérents
-            request.setAttribute("mesAdherents", unService.consulterListeAdherents());
-            destinationPage = "listerAdherent";
+            destinationPage = "redirect:/listerAdherent.htm";
+        } catch (Exception e) {
+            request.setAttribute("MesErreurs", e.getMessage());
+            destinationPage = "Erreur";
+        }
+
+        return new ModelAndView(destinationPage);
+    }
+
+    @RequestMapping(value = "modificationOeuvre.htm")
+    public ModelAndView modificationOeuvre(HttpServletRequest request, HttpServletResponse response) throws Exception {
+
+        String destinationPage = null;
+        try {
+            Service unService = new Service();
+            OeuvreventeEntity uneOeuvre = unService.oeuvreById(Integer.parseInt(request.getParameter("id")));
+            uneOeuvre.setTitreOeuvrevente(request.getParameter("titre"));
+            uneOeuvre.setPrixOeuvrevente(Integer.parseInt(request.getParameter("prix")));
+            uneOeuvre.setProprietaireOeuvrevente(unService.proprietaireById(Integer.parseInt(request.getParameter("proprietaire"))));
+            unService.modifierObjet(uneOeuvre);
+            destinationPage = "redirect:/listerOeuvre.htm";
         } catch (Exception e) {
             request.setAttribute("MesErreurs", e.getMessage());
             destinationPage = "Erreur";
@@ -206,10 +236,7 @@ public class MultiControleur {
             uneReservationPK.setIdOeuvrevente(idOeuvre);
             unService.insertObjet(uneReservationPK);
 
-            // Retour liste Oeuvre
-            request.setAttribute("mesOeuvres", unService.consulterListeOeuvres());
-            request.setAttribute("mesAdherents", unService.consulterListeAdherents());
-            destinationPage = "listerOeuvre";
+            destinationPage = "redirect:/listerOeuvre.htm";
         } catch (Exception e) {
             request.setAttribute("MesErreurs", e.getMessage());
             destinationPage = "Erreur";
