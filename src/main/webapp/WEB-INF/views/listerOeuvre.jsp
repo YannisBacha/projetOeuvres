@@ -82,8 +82,8 @@
                                 class="glyphicon glyphicon-pencil"></span> Modifier</a>
                             <a class="btn btn-warning" href="cancelReservation.htm?id=${item.idOeuvrevente}"
                                role="button"><span
-                                    class="glyphicon glyphicon-import"></span> Annuler</a></td>
-                        <a class="btn btn-succes" href="validReservation.htm?id=${item.idOeuvrevente}"
+                                    class="glyphicon glyphicon-import"></span> Annuler</a>
+                            <a class="btn btn-success" href="validReservation.htm?id=${item.idOeuvrevente}"
                            role="button"><span
                                 class="glyphicon glyphicon-ok"></span> Valider</a></td>
                     </c:when>
