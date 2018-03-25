@@ -22,8 +22,8 @@
             $("#modalReservation").modal('show');
         });*/
         $('#modalReservation').on('show.bs.modal', function (e) {
-            console.log(e.relatedTarget);
-            console.log(e.relatedTarget.id);
+            console.log("la " + e.relatedTarget);
+            console.log("le " + e.relatedTarget.id);
             $(".modal-body #idOeuvre").val(e.relatedTarget.id);
         })
     });
