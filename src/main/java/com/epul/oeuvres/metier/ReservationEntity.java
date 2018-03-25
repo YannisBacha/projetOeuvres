@@ -8,14 +8,25 @@ import java.sql.Date;
  */
 @Entity
 @Table(name = "reservation", schema = "baseoeuvre", catalog = "")
-@IdClass(ReservationEntityPK.class)
 public class ReservationEntity {
+    @EmbeddedId
+    private ReservationEntityPK id;
     private int idOeuvrevente;
     private int idAdherent;
+    //private int idAdherent;
     private Date dateReservation;
     private String statut;
     private OeuvreventeEntity oeuvreventeByIdOeuvrevente;
     private AdherentEntity adherentByIdAdherent;
+
+
+    public ReservationEntityPK getId() {
+        return id;
+    }
+
+    public void setId(ReservationEntityPK id) {
+        this.id = id;
+    }
 
     @Id
     @Column(name = "id_oeuvrevente")

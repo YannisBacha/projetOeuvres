@@ -1,18 +1,19 @@
 package com.epul.oeuvres.metier;
 
 import javax.persistence.Column;
-import javax.persistence.Id;
+import javax.persistence.Embeddable;
 import java.io.Serializable;
 
 /**
  * Created by christian on 19/02/2017.
  */
+@Embeddable
 public class ReservationEntityPK implements Serializable {
+    @Column(name = "id_oeuvrevente")
     private int idOeuvrevente;
+    @Column(name = "id_adherent")
     private int idAdherent;
 
-    @Column(name = "id_oeuvrevente", insertable = false, updatable = false)
-    @Id
     public int getIdOeuvrevente() {
         return idOeuvrevente;
     }
@@ -21,14 +22,17 @@ public class ReservationEntityPK implements Serializable {
         this.idOeuvrevente = idOeuvrevente;
     }
 
-    @Column(name = "id_adherent", insertable = false, updatable = false)
-    @Id
     public int getIdAdherent() {
         return idAdherent;
     }
 
     public void setIdAdherent(int idAdherent) {
         this.idAdherent = idAdherent;
+    }
+
+    public ReservationEntityPK(int oeuvre, int adherent) {
+        setIdOeuvrevente(oeuvre);
+        setIdAdherent(adherent);
     }
 
     @Override

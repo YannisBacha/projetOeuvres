@@ -219,10 +219,11 @@ public class MultiControleur {
             ReservationEntity uneReservation = new ReservationEntity();
             Service unService = new Service();
 
-            uneReservation.setIdAdherent(idAdherent);
-            uneReservation.setIdOeuvrevente(idOeuvre);
+            ReservationEntityPK uneReservationPK = new ReservationEntityPK(idOeuvre, idAdherent);
+            //uneReservation = unService.reservationByPK(uneReservationPK);
+            uneReservation.setId(uneReservationPK);
             uneReservation.setDateReservation(new Date(Calendar.getInstance().getTime().getTime()));
-            uneReservation.setStatut("confirmee");
+            uneReservation.setStatut("encours");
             uneReservation.setAdherentByIdAdherent(unService.adherentById(idAdherent));
             uneReservation.setOeuvreventeByIdOeuvrevente(unService.oeuvreById(idOeuvre));
             unService.insertObjet(uneReservation);
@@ -231,10 +232,6 @@ public class MultiControleur {
             uneOeuvre.setEtatOeuvrevente("R");
             unService.modifierObjet(uneOeuvre);
 
-            ReservationEntityPK uneReservationPK = new ReservationEntityPK();
-            uneReservationPK.setIdAdherent(idAdherent);
-            uneReservationPK.setIdOeuvrevente(idOeuvre);
-            unService.insertObjet(uneReservationPK);
 
             destinationPage = "redirect:/listerOeuvre.htm";
         } catch (Exception e) {

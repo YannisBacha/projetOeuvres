@@ -9,26 +9,6 @@ import javax.persistence.EntityTransaction;
 import java.util.List;
 
 public class Service extends EntityService{
-
-	/*
-	* Pas utile comme on utilise entitymanager.persist()
-	* Le traitement est le même pour toutes les insertions, qu'importe l'objet
-	public void insertAdherent(AdherentEntity unAdherent) throws MonException {
-			this.insertObjet(unAdherent);
-	}
-
-	public void insertOeuvre(OeuvreventeEntity uneOeuvre) throws MonException {
-		this.insertObjet(uneOeuvre);
-	}
-
-	public void insertReservation(ReservationEntity uneReservation) throws MonException {
-		this.insertObjet(uneReservation);
-	}
-
-	public void insertReservationPk(ReservationEntityPK uneReservation) throws MonException {
-		this.insertObjet(uneReservation);
-	}
-	*/
 	public void insertObjet(Object o) throws MonException {
 		EntityTransaction transac = null;
 		try {
@@ -153,16 +133,6 @@ public class Service extends EntityService{
 			e.printStackTrace();
 		}
 	}
-
-	/* Comme pour les insertions, on utilise une méthode de entitymanager.
-	public void modifierAdherent(AdherentEntity adherentEntity) throws MonException {
-		this.modifierObjet(adherentEntity);
-	}
-
-	public void modifierOeuvre(OeuvreventeEntity oeuvreventeEntity) throws MonException {
-		this.modifierObjet(oeuvreventeEntity);
-	}
-	*/
 
 	public void modifierObjet(Object o) throws MonException {
 		try {
