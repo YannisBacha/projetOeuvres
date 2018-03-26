@@ -1,17 +1,12 @@
 package com.epul.oeuvres.metier;
 
-import javax.persistence.Column;
-import javax.persistence.Embeddable;
 import java.io.Serializable;
 
 /**
  * Created by christian on 19/02/2017.
  */
-@Embeddable
 public class ReservationEntityPK implements Serializable {
-    @Column(name = "id_oeuvrevente")
     private int idOeuvrevente;
-    @Column(name = "id_adherent")
     private int idAdherent;
 
     public int getIdOeuvrevente() {
@@ -28,6 +23,10 @@ public class ReservationEntityPK implements Serializable {
 
     public void setIdAdherent(int idAdherent) {
         this.idAdherent = idAdherent;
+    }
+
+
+    public ReservationEntityPK() {
     }
 
     public ReservationEntityPK(int oeuvre, int adherent) {

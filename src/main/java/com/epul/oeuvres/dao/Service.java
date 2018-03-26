@@ -26,6 +26,20 @@ public class Service extends EntityService{
 		}
 	}
 
+    public void modifierObjet(Object o) throws MonException {
+        try {
+            EntityTransaction transac = startTransaction();
+            transac.begin();
+            entitymanager.merge(o);
+            transac.commit();
+            entitymanager.close();
+        } catch (RuntimeException e) {
+            new MonException("Erreur de lecture", e.getMessage());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 	public List<AdherentEntity> consulterListeAdherents() throws MonException {
 		List<AdherentEntity> mesAdherents = null;
 		try
@@ -128,20 +142,6 @@ public class Service extends EntityService{
 			entitymanager.close();
 		} catch (RuntimeException e) {
 			e.printStackTrace();
-			new MonException("Erreur de lecture", e.getMessage());
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
-	public void modifierObjet(Object o) throws MonException {
-		try {
-			EntityTransaction transac = startTransaction();
-			transac.begin();
-			entitymanager.merge(o);
-			transac.commit();
-			entitymanager.close();
-		} catch (RuntimeException e) {
 			new MonException("Erreur de lecture", e.getMessage());
 		} catch (Exception e) {
 			e.printStackTrace();

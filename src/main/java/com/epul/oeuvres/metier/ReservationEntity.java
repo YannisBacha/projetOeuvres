@@ -1,5 +1,8 @@
 package com.epul.oeuvres.metier;
 
+import com.epul.oeuvres.metier.repositories.ReservationRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+
 import javax.persistence.*;
 import java.sql.Date;
 
@@ -8,24 +11,25 @@ import java.sql.Date;
  */
 @Entity
 @Table(name = "reservation", schema = "baseoeuvre", catalog = "")
+@IdClass(ReservationEntityPK.class)
 public class ReservationEntity {
-    @EmbeddedId
-    private ReservationEntityPK id;
     private int idOeuvrevente;
     private int idAdherent;
-    //private int idAdherent;
     private Date dateReservation;
     private String statut;
-    private OeuvreventeEntity oeuvreventeByIdOeuvrevente;
-    private AdherentEntity adherentByIdAdherent;
+    @Autowired
+    private ReservationRepository repository;
 
-
-    public ReservationEntityPK getId() {
-        return id;
+    public ReservationEntity() {
     }
 
-    public void setId(ReservationEntityPK id) {
-        this.id = id;
+    public ReservationEntity(ReservationEntityPK reservationEntityPK) {
+        idOeuvrevente = reservationEntityPK.getIdOeuvrevente();
+        idAdherent = reservationEntityPK.getIdAdherent();
+    }
+
+    public ReservationEntity findReservation(int idOeuvre) {
+        return repository.findReservationEntityByIdOeuvrevente(idOeuvre);
     }
 
     @Id
@@ -93,7 +97,7 @@ public class ReservationEntity {
         return result;
     }
 
-    @ManyToOne
+/*    @ManyToOne
     @JoinColumn(name = "id_oeuvrevente", referencedColumnName = "id_oeuvrevente", nullable = false)
     public OeuvreventeEntity getOeuvreventeByIdOeuvrevente() {
         return oeuvreventeByIdOeuvrevente;
@@ -111,5 +115,5 @@ public class ReservationEntity {
 
     public void setAdherentByIdAdherent(AdherentEntity adherentByIdAdherent) {
         this.adherentByIdAdherent = adherentByIdAdherent;
-    }
+    }*/
 }
