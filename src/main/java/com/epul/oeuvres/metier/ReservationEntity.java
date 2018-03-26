@@ -1,8 +1,5 @@
 package com.epul.oeuvres.metier;
 
-import com.epul.oeuvres.metier.repositories.ReservationRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-
 import javax.persistence.*;
 import java.sql.Date;
 
@@ -17,8 +14,6 @@ public class ReservationEntity {
     private int idAdherent;
     private Date dateReservation;
     private String statut;
-    @Autowired
-    private ReservationRepository repository;
 
     public ReservationEntity() {
     }
@@ -26,10 +21,6 @@ public class ReservationEntity {
     public ReservationEntity(ReservationEntityPK reservationEntityPK) {
         idOeuvrevente = reservationEntityPK.getIdOeuvrevente();
         idAdherent = reservationEntityPK.getIdAdherent();
-    }
-
-    public ReservationEntity findReservation(int idOeuvre) {
-        return repository.findReservationEntityByIdOeuvrevente(idOeuvre);
     }
 
     @Id

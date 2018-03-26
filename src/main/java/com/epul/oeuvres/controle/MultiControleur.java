@@ -18,6 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.sql.Date;
 import java.util.Calendar;
+import java.util.List;
 
 @Controller
 public class MultiControleur {
@@ -240,8 +241,7 @@ public class MultiControleur {
         String destinationPage = "";
         try {
             Service unService = new Service();
-            ReservationEntity uneReservation = new ReservationEntity();
-            //uneReservation = uneReservation.findReservation(getId);
+            unService.supprimerReservation(this.getReservation(getId));
             OeuvreventeEntity uneOeuvre = unService.oeuvreById(getId);
             uneOeuvre.setEtatOeuvrevente("L");
             unService.modifierObjet(uneOeuvre);
@@ -251,6 +251,40 @@ public class MultiControleur {
             destinationPage = "Erreur";
         }
         return new ModelAndView(destinationPage);
+    }
+
+    @RequestMapping(value = "validReservation.htm", method = RequestMethod.GET)
+    public ModelAndView validReservation(HttpServletRequest request, HttpServletResponse response, @RequestParam("id") int getId) throws Exception {
+        String destinationPage = "";
+        try {
+            Service unService = new Service();
+            ReservationEntity uneReservation = this.getReservation(getId);
+            uneReservation.setStatut("confirmee");
+            unService.modifierObjet(uneReservation);
+            OeuvreventeEntity uneOeuvre = unService.oeuvreById(getId);
+            uneOeuvre.setEtatOeuvrevente("C");
+            unService.modifierObjet(uneOeuvre);
+            destinationPage = "redirect:/listerOeuvre.htm";
+        } catch (Exception e) {
+            request.setAttribute("MesErreurs", e.getMessage());
+            destinationPage = "Erreur";
+        }
+        return new ModelAndView(destinationPage);
+    }
+
+    public ReservationEntity getReservation(int idOeuvre) throws MonException {
+        Service unService = new Service();
+        ReservationEntity uneReservation = null;
+        ReservationEntityPK uneReservationPK = new ReservationEntityPK();
+        uneReservationPK.setIdOeuvrevente(idOeuvre);
+        List<AdherentEntity> adherents = unService.consulterListeAdherents();
+        for (AdherentEntity adherent : adherents) {
+            uneReservationPK.setIdAdherent(adherent.getIdAdherent());
+            uneReservation = unService.reservationByPK(uneReservationPK);
+            if (uneReservation != null)
+                break;
+        }
+        return uneReservation;
     }
     //endregion
 

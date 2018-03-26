@@ -76,7 +76,7 @@
                            role="button"><span
                                 class="glyphicon glyphicon-ok"></span> Valider</a></td>
                     </c:when>
-                    <c:otherwise>
+                    <c:when test="${item.etatOeuvrevente == 'L'}">
                         <td>Réservation Possible</td>
                         <td><a class="btn btn-info" href="modifierOeuvre.htm?id=${item.idOeuvrevente}"
                                role="button"><span class="glyphicon glyphicon-pencil"></span> Modifier</a>
@@ -84,6 +84,13 @@
                                     id="${item.idOeuvrevente}" type="button"><span
                                     class="glyphicon glyphicon-export"></span> Réservation
                             </button>
+                        </td>
+                    </c:when>
+                    <c:otherwise>
+                        <td>Vente réalisée</td>
+                        <td><a class="btn btn-danger" href="cancelReservation.htm?id=${item.idOeuvrevente}"
+                               role="button"><span
+                                class="glyphicon glyphicon-remove-circle"></span> Reset</a>
                         </td>
                     </c:otherwise>
                 </c:choose>

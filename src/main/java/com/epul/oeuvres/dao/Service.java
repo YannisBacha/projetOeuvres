@@ -1,9 +1,7 @@
 package com.epul.oeuvres.dao;
 
 import com.epul.oeuvres.meserreurs.MonException;
-import com.epul.oeuvres.metier.AdherentEntity;
-import com.epul.oeuvres.metier.OeuvreventeEntity;
-import com.epul.oeuvres.metier.ProprietaireEntity;
+import com.epul.oeuvres.metier.*;
 
 import javax.persistence.EntityTransaction;
 import java.util.List;
@@ -133,6 +131,21 @@ public class Service extends EntityService{
 		return proprietaire;
 	}
 
+    public ReservationEntity reservationByPK(ReservationEntityPK reservationEntityPK) throws MonException {
+        ReservationEntity reservationEntity = null;
+        try {
+            EntityTransaction transac = startTransaction();
+            transac.begin();
+            reservationEntity = entitymanager.find(ReservationEntity.class, reservationEntityPK);
+            entitymanager.close();
+        } catch (RuntimeException e) {
+            new MonException("Erreur de lecture", e.getMessage());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return reservationEntity;
+    }
+
 	public void supprimerAdherent(int numero) throws MonException {
 		try {
 			EntityTransaction transac = startTransaction();
@@ -147,4 +160,20 @@ public class Service extends EntityService{
 			e.printStackTrace();
 		}
 	}
+
+    public void supprimerReservation(ReservationEntity reservationEntity) throws MonException {
+        try {
+            EntityTransaction transac = startTransaction();
+            transac.begin();
+            entitymanager.createQuery("DELETE FROM ReservationEntity r WHERE r.idAdherent = :numeroA AND r.idOeuvre = :numeroB")
+                    .setParameter("numeroA", reservationEntity.getIdAdherent()).setParameter("numeroB", reservationEntity.getIdOeuvrevente()).executeUpdate();
+            transac.commit();
+            entitymanager.close();
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+            new MonException("Erreur de lecture", e.getMessage());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }
