@@ -176,4 +176,19 @@ public class Service extends EntityService{
             e.printStackTrace();
         }
     }
+
+	public ReservationEntity getReservation(int idOeuvre) throws MonException {
+		Service unService = new Service();
+		ReservationEntity uneReservation = null;
+		ReservationEntityPK uneReservationPK = new ReservationEntityPK();
+		uneReservationPK.setIdOeuvrevente(idOeuvre);
+		List<AdherentEntity> adherents = unService.consulterListeAdherents();
+		for (AdherentEntity adherent : adherents) {
+			uneReservationPK.setIdAdherent(adherent.getIdAdherent());
+			uneReservation = unService.reservationByPK(uneReservationPK);
+			if (uneReservation != null)
+				break;
+		}
+		return uneReservation;
+	}
 }

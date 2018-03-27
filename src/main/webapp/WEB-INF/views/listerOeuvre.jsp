@@ -36,19 +36,18 @@
                 </div>
                 <div class="modal-body">
                     <form action="reserverOeuvre.htm" method="post">
+                        <input type="hidden" name="idOeuvre" id="idOeuvre" value=""/>
                         <div class="form-group">
-                            <input type="hidden" name="idOeuvre" id="idOeuvre" value=""/>
+                            <label for="date_reservation">Sélectionner une date</label>
+                            <input class="form-control" type="date" name="date_reservation" id="date_reservation"/>
+                        </div>
+                        <div class="form-group">
                             <label for="adherent">Sélectionner un adhérent</label>
                             <select class="form-control" name="adherent" id="adherent">
                                 <c:forEach items="${mesAdherents}" var="item">
                                     <option value="${item.idAdherent}">${item.prenomAdherent} ${item.nomAdherent}</option>
                                 </c:forEach>
                             </select>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="date_reservation">Sélectionner une date</label>
-                            <input class="form-control" type="date" name="date_reservation" id="date_reservation"/>
                         </div>
                         <button type="submit" class="btn btn-primary">Valider</button>
                     </form>

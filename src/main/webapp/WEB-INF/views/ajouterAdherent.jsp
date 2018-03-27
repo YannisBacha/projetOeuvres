@@ -26,15 +26,15 @@
             <form action="insererAdherent.htm" method="post" onsubmit="return teste()">
                 <div class="form-group">
                     <label for="nom">Nom de l'adhérent</label>
-                    <input type="text" class="form-control" name="nom" id="nom"/>
+                    <input type="text" class="form-control" name="nom" id="nom" required/>
                 </div>
                 <div class="form-group">
                     <label for="prenom">Prénom de l'adhérent</label>
-                    <input type="text" class="form-control" name="prenom" id="prenom"/>
+                    <input type="text" class="form-control" name="prenom" id="prenom" required/>
                 </div>
                 <div class="form-group">
                     <label for="ville">Ville de l'adhérent</label>
-                    <input type="text" class="form-control" name="ville" id="ville"/>
+                    <input type="text" class="form-control" name="ville" id="ville" required/>
                 </div>
                 <button type="submit" class="btn btn-primary">Valider</button>
             </form>

@@ -8,9 +8,16 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <link href="<c:url value="/resources/css/bootstrap.min.css" />" rel="stylesheet">
     <link href="<c:url value="/resources/css/oeuvre.css" />" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="<c:url value="/resources/js/bootstrap.min.js" />"></script>
     <title>Modification d'une oeuvre</title>
 </head>
+<script>
+    function clearInput() {
+        document.getElementById("titre").value = "";
+        document.getElementById("prix").value = "";
+    }
+</script>
 <body>
 <div class="container">
     <jsp:include page="navbar.jsp"/>
@@ -21,12 +28,12 @@
                 <input type="hidden" name="id" value="${monOeuvre.idOeuvrevente}">
                 <div class="form-group">
                     <label for="titre">Titre de l'oeuvre</label>
-                    <input type="text" class="form-control" name="titre" id="titre"
+                    <input type="text" class="form-control" name="titre" id="titre" required
                            value="${monOeuvre.titreOeuvrevente}"/>
                 </div>
                 <div class="form-group">
                     <label for="prix">Prix de l'oeuvre</label>
-                    <input type="number" class="form-control" name="prix" id="prix"
+                    <input type="number" class="form-control" name="prix" id="prix" required
                            value="${monOeuvre.prixOeuvrevente}"/>
                 </div>
                 <div class="form-group">
@@ -38,6 +45,7 @@
                     </select>
                 </div>
                 <button type="submit" class="btn btn-primary">Valider</button>
+                <button type="button" class="btn btn-warning" onclick="clearInput()">Reset</button>
             </form>
         </div>
     </div>

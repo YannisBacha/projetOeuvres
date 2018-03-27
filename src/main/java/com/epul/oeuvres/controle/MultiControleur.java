@@ -18,10 +18,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.sql.Date;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.Calendar;
-import java.util.List;
 
 @Controller
 public class MultiControleur {
@@ -246,7 +242,7 @@ public class MultiControleur {
         String destinationPage = "";
         try {
             Service unService = new Service();
-            unService.supprimerReservation(this.getReservation(getId));
+            unService.supprimerReservation(unService.getReservation(getId));
             OeuvreventeEntity uneOeuvre = unService.oeuvreById(getId);
             uneOeuvre.setEtatOeuvrevente("L");
             unService.modifierObjet(uneOeuvre);
@@ -263,7 +259,7 @@ public class MultiControleur {
         String destinationPage = "";
         try {
             Service unService = new Service();
-            ReservationEntity uneReservation = this.getReservation(getId);
+            ReservationEntity uneReservation = unService.getReservation(getId);
             uneReservation.setStatut("confirmee");
             unService.modifierObjet(uneReservation);
             OeuvreventeEntity uneOeuvre = unService.oeuvreById(getId);
@@ -275,21 +271,6 @@ public class MultiControleur {
             destinationPage = "Erreur";
         }
         return new ModelAndView(destinationPage);
-    }
-
-    public ReservationEntity getReservation(int idOeuvre) throws MonException {
-        Service unService = new Service();
-        ReservationEntity uneReservation = null;
-        ReservationEntityPK uneReservationPK = new ReservationEntityPK();
-        uneReservationPK.setIdOeuvrevente(idOeuvre);
-        List<AdherentEntity> adherents = unService.consulterListeAdherents();
-        for (AdherentEntity adherent : adherents) {
-            uneReservationPK.setIdAdherent(adherent.getIdAdherent());
-            uneReservation = unService.reservationByPK(uneReservationPK);
-            if (uneReservation != null)
-                break;
-        }
-        return uneReservation;
     }
     //endregion
 

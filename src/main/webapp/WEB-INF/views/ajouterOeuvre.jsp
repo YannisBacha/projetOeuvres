@@ -27,11 +27,11 @@
             <form action="insertOeuvre.htm" method="post" onsubmit="return teste()">
                 <div class="form-group">
                     <label for="titre">Titre de l'oeuvre</label>
-                    <input type="text" class="form-control" name="titre" id="titre"/>
+                    <input type="text" class="form-control" name="titre" id="titre" required/>
                 </div>
                 <div class="form-group">
                     <label for="prix">Prix de l'oeuvre</label>
-                    <input type="number" class="form-control" name="prix" id="prix"/>
+                    <input type="number" class="form-control" name="prix" id="prix" required/>
                 </div>
                 <div class="form-group">
                     <label for="proprietaire">Propriétaire de l'oeuvre</label>
