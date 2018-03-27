@@ -1,34 +1,12 @@
 package com.epul.oeuvres.dao;
 
 import com.epul.oeuvres.meserreurs.MonException;
-import com.epul.oeuvres.metier.AdherentEntity;
-import com.epul.oeuvres.metier.OeuvreventeEntity;
-import com.epul.oeuvres.metier.ProprietaireEntity;
+import com.epul.oeuvres.metier.*;
 
 import javax.persistence.EntityTransaction;
 import java.util.List;
 
 public class Service extends EntityService{
-
-	/*
-	* Pas utile comme on utilise entitymanager.persist()
-	* Le traitement est le même pour toutes les insertions, qu'importe l'objet
-	public void insertAdherent(AdherentEntity unAdherent) throws MonException {
-			this.insertObjet(unAdherent);
-	}
-
-	public void insertOeuvre(OeuvreventeEntity uneOeuvre) throws MonException {
-		this.insertObjet(uneOeuvre);
-	}
-
-	public void insertReservation(ReservationEntity uneReservation) throws MonException {
-		this.insertObjet(uneReservation);
-	}
-
-	public void insertReservationPk(ReservationEntityPK uneReservation) throws MonException {
-		this.insertObjet(uneReservation);
-	}
-	*/
 	public void insertObjet(Object o) throws MonException {
 		EntityTransaction transac = null;
 		try {
@@ -45,6 +23,20 @@ public class Service extends EntityService{
 			e.printStackTrace();
 		}
 	}
+
+    public void modifierObjet(Object o) throws MonException {
+        try {
+            EntityTransaction transac = startTransaction();
+            transac.begin();
+            entitymanager.merge(o);
+            transac.commit();
+            entitymanager.close();
+        } catch (RuntimeException e) {
+            new MonException("Erreur de lecture", e.getMessage());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
 	public List<AdherentEntity> consulterListeAdherents() throws MonException {
 		List<AdherentEntity> mesAdherents = null;
@@ -139,6 +131,21 @@ public class Service extends EntityService{
 		return proprietaire;
 	}
 
+    public ReservationEntity reservationByPK(ReservationEntityPK reservationEntityPK) throws MonException {
+        ReservationEntity reservationEntity = null;
+        try {
+            EntityTransaction transac = startTransaction();
+            transac.begin();
+            reservationEntity = entitymanager.find(ReservationEntity.class, reservationEntityPK);
+            entitymanager.close();
+        } catch (RuntimeException e) {
+            new MonException("Erreur de lecture", e.getMessage());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return reservationEntity;
+    }
+
 	public void supprimerAdherent(int numero) throws MonException {
 		try {
 			EntityTransaction transac = startTransaction();
@@ -154,27 +161,19 @@ public class Service extends EntityService{
 		}
 	}
 
-	/* Comme pour les insertions, on utilise une méthode de entitymanager.
-	public void modifierAdherent(AdherentEntity adherentEntity) throws MonException {
-		this.modifierObjet(adherentEntity);
-	}
-
-	public void modifierOeuvre(OeuvreventeEntity oeuvreventeEntity) throws MonException {
-		this.modifierObjet(oeuvreventeEntity);
-	}
-	*/
-
-	public void modifierObjet(Object o) throws MonException {
-		try {
-			EntityTransaction transac = startTransaction();
-			transac.begin();
-			entitymanager.merge(o);
-			transac.commit();
-			entitymanager.close();
-		} catch (RuntimeException e) {
-			new MonException("Erreur de lecture", e.getMessage());
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
+    public void supprimerReservation(ReservationEntity reservationEntity) throws MonException {
+        try {
+            EntityTransaction transac = startTransaction();
+            transac.begin();
+            entitymanager.createQuery("DELETE FROM ReservationEntity r WHERE r.idAdherent = :numeroA AND r.idOeuvrevente = :numeroB")
+                    .setParameter("numeroA", reservationEntity.getIdAdherent()).setParameter("numeroB", reservationEntity.getIdOeuvrevente()).executeUpdate();
+            transac.commit();
+            entitymanager.close();
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+            new MonException("Erreur de lecture", e.getMessage());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }

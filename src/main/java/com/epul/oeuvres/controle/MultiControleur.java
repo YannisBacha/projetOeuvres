@@ -17,7 +17,11 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.sql.Date;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
+import java.util.List;
 
 @Controller
 public class MultiControleur {
@@ -216,25 +220,18 @@ public class MultiControleur {
         try {
             int idOeuvre = Integer.parseInt(request.getParameter("idOeuvre"));
             int idAdherent = Integer.parseInt(request.getParameter("adherent"));
-            ReservationEntity uneReservation = new ReservationEntity();
             Service unService = new Service();
 
-            uneReservation.setIdAdherent(idAdherent);
-            uneReservation.setIdOeuvrevente(idOeuvre);
-            uneReservation.setDateReservation(new Date(Calendar.getInstance().getTime().getTime()));
-            uneReservation.setStatut("confirmee");
-            uneReservation.setAdherentByIdAdherent(unService.adherentById(idAdherent));
-            uneReservation.setOeuvreventeByIdOeuvrevente(unService.oeuvreById(idOeuvre));
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+
+            ReservationEntity uneReservation = new ReservationEntity(new ReservationEntityPK(idOeuvre, idAdherent));
+            uneReservation.setDateReservation(new Date(formatter.parse(request.getParameter("date_reservation")).getTime()));
+            uneReservation.setStatut("encours");
             unService.insertObjet(uneReservation);
 
             OeuvreventeEntity uneOeuvre = unService.oeuvreById(idOeuvre);
             uneOeuvre.setEtatOeuvrevente("R");
             unService.modifierObjet(uneOeuvre);
-
-            ReservationEntityPK uneReservationPK = new ReservationEntityPK();
-            uneReservationPK.setIdAdherent(idAdherent);
-            uneReservationPK.setIdOeuvrevente(idOeuvre);
-            unService.insertObjet(uneReservationPK);
 
             destinationPage = "redirect:/listerOeuvre.htm";
         } catch (Exception e) {
@@ -242,6 +239,57 @@ public class MultiControleur {
             destinationPage = "Erreur";
         }
         return new ModelAndView(destinationPage);
+    }
+
+    @RequestMapping(value = "cancelReservation.htm", method = RequestMethod.GET)
+    public ModelAndView cancelReservation(HttpServletRequest request, HttpServletResponse response, @RequestParam("id") int getId) throws Exception {
+        String destinationPage = "";
+        try {
+            Service unService = new Service();
+            unService.supprimerReservation(this.getReservation(getId));
+            OeuvreventeEntity uneOeuvre = unService.oeuvreById(getId);
+            uneOeuvre.setEtatOeuvrevente("L");
+            unService.modifierObjet(uneOeuvre);
+            destinationPage = "redirect:/listerOeuvre.htm";
+        } catch (Exception e) {
+            request.setAttribute("MesErreurs", e.getMessage());
+            destinationPage = "Erreur";
+        }
+        return new ModelAndView(destinationPage);
+    }
+
+    @RequestMapping(value = "validReservation.htm", method = RequestMethod.GET)
+    public ModelAndView validReservation(HttpServletRequest request, HttpServletResponse response, @RequestParam("id") int getId) throws Exception {
+        String destinationPage = "";
+        try {
+            Service unService = new Service();
+            ReservationEntity uneReservation = this.getReservation(getId);
+            uneReservation.setStatut("confirmee");
+            unService.modifierObjet(uneReservation);
+            OeuvreventeEntity uneOeuvre = unService.oeuvreById(getId);
+            uneOeuvre.setEtatOeuvrevente("C");
+            unService.modifierObjet(uneOeuvre);
+            destinationPage = "redirect:/listerOeuvre.htm";
+        } catch (Exception e) {
+            request.setAttribute("MesErreurs", e.getMessage());
+            destinationPage = "Erreur";
+        }
+        return new ModelAndView(destinationPage);
+    }
+
+    public ReservationEntity getReservation(int idOeuvre) throws MonException {
+        Service unService = new Service();
+        ReservationEntity uneReservation = null;
+        ReservationEntityPK uneReservationPK = new ReservationEntityPK();
+        uneReservationPK.setIdOeuvrevente(idOeuvre);
+        List<AdherentEntity> adherents = unService.consulterListeAdherents();
+        for (AdherentEntity adherent : adherents) {
+            uneReservationPK.setIdAdherent(adherent.getIdAdherent());
+            uneReservation = unService.reservationByPK(uneReservationPK);
+            if (uneReservation != null)
+                break;
+        }
+        return uneReservation;
     }
     //endregion
 

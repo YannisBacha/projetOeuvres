@@ -14,8 +14,14 @@ public class ReservationEntity {
     private int idAdherent;
     private Date dateReservation;
     private String statut;
-    private OeuvreventeEntity oeuvreventeByIdOeuvrevente;
-    private AdherentEntity adherentByIdAdherent;
+
+    public ReservationEntity() {
+    }
+
+    public ReservationEntity(ReservationEntityPK reservationEntityPK) {
+        idOeuvrevente = reservationEntityPK.getIdOeuvrevente();
+        idAdherent = reservationEntityPK.getIdAdherent();
+    }
 
     @Id
     @Column(name = "id_oeuvrevente")
@@ -82,7 +88,7 @@ public class ReservationEntity {
         return result;
     }
 
-    @ManyToOne
+/*    @ManyToOne
     @JoinColumn(name = "id_oeuvrevente", referencedColumnName = "id_oeuvrevente", nullable = false)
     public OeuvreventeEntity getOeuvreventeByIdOeuvrevente() {
         return oeuvreventeByIdOeuvrevente;
@@ -100,5 +106,5 @@ public class ReservationEntity {
 
     public void setAdherentByIdAdherent(AdherentEntity adherentByIdAdherent) {
         this.adherentByIdAdherent = adherentByIdAdherent;
-    }
+    }*/
 }

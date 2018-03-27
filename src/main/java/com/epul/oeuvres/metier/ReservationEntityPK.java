@@ -1,7 +1,5 @@
 package com.epul.oeuvres.metier;
 
-import javax.persistence.Column;
-import javax.persistence.Id;
 import java.io.Serializable;
 
 /**
@@ -11,8 +9,6 @@ public class ReservationEntityPK implements Serializable {
     private int idOeuvrevente;
     private int idAdherent;
 
-    @Column(name = "id_oeuvrevente", insertable = false, updatable = false)
-    @Id
     public int getIdOeuvrevente() {
         return idOeuvrevente;
     }
@@ -21,14 +17,21 @@ public class ReservationEntityPK implements Serializable {
         this.idOeuvrevente = idOeuvrevente;
     }
 
-    @Column(name = "id_adherent", insertable = false, updatable = false)
-    @Id
     public int getIdAdherent() {
         return idAdherent;
     }
 
     public void setIdAdherent(int idAdherent) {
         this.idAdherent = idAdherent;
+    }
+
+
+    public ReservationEntityPK() {
+    }
+
+    public ReservationEntityPK(int oeuvre, int adherent) {
+        setIdOeuvrevente(oeuvre);
+        setIdAdherent(adherent);
     }
 
     @Override

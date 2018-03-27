@@ -15,15 +15,7 @@
 
 <script>
     $(document).ready(function () {
-        /*$("#btnReservation").click(function(){
-            var idOeuvre = $(this).data('id');
-            console.log(idOeuvre);
-            $(".modal-body #idOeuvre").val(idOeuvre);
-            $("#modalReservation").modal('show');
-        });*/
         $('#modalReservation').on('show.bs.modal', function (e) {
-            console.log("la " + e.relatedTarget);
-            console.log("le " + e.relatedTarget.id);
             $(".modal-body #idOeuvre").val(e.relatedTarget.id);
         })
     });
@@ -39,19 +31,24 @@
             <!-- Modal content-->
             <div class="modal-content">
                 <div class="modal-header">
-                    <button type="hidden" class="close" data-dismiss="modal">&times;</button>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
                     <h4 class="modal-title">Réservation de l'oeuvre</h4>
                 </div>
                 <div class="modal-body">
                     <form action="reserverOeuvre.htm" method="post">
                         <div class="form-group">
-                            <input type="text" name="idOeuvre" id="idOeuvre" value=""/>
+                            <input type="hidden" name="idOeuvre" id="idOeuvre" value=""/>
                             <label for="adherent">Sélectionner un adhérent</label>
                             <select class="form-control" name="adherent" id="adherent">
                                 <c:forEach items="${mesAdherents}" var="item">
                                     <option value="${item.idAdherent}">${item.prenomAdherent} ${item.nomAdherent}</option>
                                 </c:forEach>
                             </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="date_reservation">Sélectionner une date</label>
+                            <input class="form-control" type="date" name="date_reservation" id="date_reservation"/>
                         </div>
                         <button type="submit" class="btn btn-primary">Valider</button>
                     </form>
@@ -77,17 +74,14 @@
                 <c:choose>
                     <c:when test="${item.etatOeuvrevente == 'R'}">
                         <td>Déjà Réservée</td>
-                        <td><a class="btn btn-info" href="modifierOeuvre.htm?id=${item.idOeuvrevente}"
-                               role="button"><span
-                                class="glyphicon glyphicon-pencil"></span> Modifier</a>
-                            <a class="btn btn-warning" href="cancelReservation.htm?id=${item.idOeuvrevente}"
+                        <td><a class="btn btn-warning" href="cancelReservation.htm?id=${item.idOeuvrevente}"
                                role="button"><span
                                     class="glyphicon glyphicon-import"></span> Annuler</a>
                             <a class="btn btn-success" href="validReservation.htm?id=${item.idOeuvrevente}"
                            role="button"><span
                                 class="glyphicon glyphicon-ok"></span> Valider</a></td>
                     </c:when>
-                    <c:otherwise>
+                    <c:when test="${item.etatOeuvrevente == 'L'}">
                         <td>Réservation Possible</td>
                         <td><a class="btn btn-info" href="modifierOeuvre.htm?id=${item.idOeuvrevente}"
                                role="button"><span class="glyphicon glyphicon-pencil"></span> Modifier</a>
@@ -95,6 +89,13 @@
                                     id="${item.idOeuvrevente}" type="button"><span
                                     class="glyphicon glyphicon-export"></span> Réservation
                             </button>
+                        </td>
+                    </c:when>
+                    <c:otherwise>
+                        <td>Vente réalisée</td>
+                        <td><a class="btn btn-danger" href="cancelReservation.htm?id=${item.idOeuvrevente}"
+                               role="button"><span
+                                class="glyphicon glyphicon-remove-circle"></span> Reset</a>
                         </td>
                     </c:otherwise>
                 </c:choose>
